@@ -8,7 +8,6 @@ namespace Data
     {
         public DbSet<Bro> Bros { get; set; }
         public DbSet<Week> Weeks { get; set; }
-        public DbSet<Match> Matches { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

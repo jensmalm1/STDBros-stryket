@@ -8,7 +8,7 @@ namespace Domain
     public class Week
     {
         [Key]
-        public int WeekNr { get; set; }
+        public int WeekId { get; set; }
         public List<Match> Matches { get; set; }
     }
 }

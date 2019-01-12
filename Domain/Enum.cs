@@ -4,11 +4,15 @@ using System.Text;
 
 namespace Domain
 {
-    public enum ResultEnum
+    public static class Enum
     {
-        HomeWin,
-        Draw,
-        AwayWin,
-        NotPlayedYet
+
+        public enum Result
+        {
+            HomeWin,
+            Draw,
+            AwayWin,
+            NotPlayedYet
+        }
     }
 }
