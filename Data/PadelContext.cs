@@ -4,20 +4,20 @@ using System;
 
 namespace Data
 {
-    public class TippContext : DbContext
+    public class PadelContext : DbContext
     {
         public DbSet<Bro> Bros { get; set; }
-        public DbSet<Week> Weeks { get; set; }
+        public DbSet<Match> Matches{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                "Server = (localdb)\\mssqllocaldb; Database = EfTipp; Trusted_Connection = True; ");
-
+                "Server = (localdb)\\mssqllocaldb; Database = EfPadel; Trusted_Connection = True; ");
         }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
+        //    modelBuilder.Entity<Bro>
         //}
 
     }

@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(TippContext))]
-    [Migration("20181231135900_myfirstmigration")]
-    partial class myfirstmigration
+    [DbContext(typeof(PadelContext))]
+    [Migration("20190202202849_rankchanges3")]
+    partial class rankchanges3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,53 +34,27 @@ namespace Data.Migrations
                     b.ToTable("Bros");
                 });
 
-            modelBuilder.Entity("Domain.Match", b =>
+            modelBuilder.Entity("Domain.Rank", b =>
                 {
-                    b.Property<int>("MatchNr")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AwayTeam");
-
-                    b.Property<string>("HomeTeam");
-
-                    b.Property<int>("Result");
-
-                    b.Property<int?>("WeekNr");
-
-                    b.HasKey("MatchNr");
-
-                    b.HasIndex("WeekNr");
-
-                    b.ToTable("Matches");
-                });
-
-            modelBuilder.Entity("Domain.Week", b =>
-                {
-                    b.Property<int>("WeekNr")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("BroId");
 
-                    b.HasKey("WeekNr");
+                    b.Property<decimal>("Ranking");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("BroId");
 
-                    b.ToTable("Weeks");
+                    b.ToTable("Rank");
                 });
 
-            modelBuilder.Entity("Domain.Match", b =>
-                {
-                    b.HasOne("Domain.Week")
-                        .WithMany("Matches")
-                        .HasForeignKey("WeekNr");
-                });
-
-            modelBuilder.Entity("Domain.Week", b =>
+            modelBuilder.Entity("Domain.Rank", b =>
                 {
                     b.HasOne("Domain.Bro")
-                        .WithMany("Weeks")
+                        .WithMany("Ranks")
                         .HasForeignKey("BroId");
                 });
 #pragma warning restore 612, 618
