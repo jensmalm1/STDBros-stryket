@@ -9,6 +9,6 @@ namespace Domain
         public const decimal OwnProportion = 0.7M;
         public const decimal GemMultiplier = 1.02M;
         public const decimal SetMultiplier = 1.2M;
-        public const decimal StaringRank = 1000;
+        public const decimal StartingRank = 1000;
     }
 }

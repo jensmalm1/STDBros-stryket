@@ -51,13 +51,26 @@ namespace Data.Migrations
                     b.ToTable("Matches");
                 });
 
+            modelBuilder.Entity("Domain.MatchTeam", b =>
+                {
+                    b.Property<int>("MatchId");
+
+                    b.Property<int>("TeamId");
+
+                    b.HasKey("MatchId", "TeamId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("MatchTeams");
+                });
+
             modelBuilder.Entity("Domain.Rank", b =>
                 {
                     b.Property<int>("RankId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BroId");
+                    b.Property<int>("BroId");
 
                     b.Property<decimal>("Ranking");
 
@@ -74,9 +87,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("TeamOneSets");
+                    b.Property<int>("SetsCountTeam1");
 
-                    b.Property<int>("TeamTwoSets");
+                    b.Property<int>("SetsCountTeam2");
 
                     b.Property<int>("Winner");
 
@@ -112,13 +125,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("MatchId");
-
                     b.HasKey("TeamId");
 
-                    b.HasIndex("MatchId");
-
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Domain.Bro", b =>
@@ -135,11 +144,25 @@ namespace Data.Migrations
                         .HasForeignKey("ResultId");
                 });
 
+            modelBuilder.Entity("Domain.MatchTeam", b =>
+                {
+                    b.HasOne("Domain.Match", "Match")
+                        .WithMany("MatchTeams")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Team", "Team")
+                        .WithMany("MatchTeams")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Domain.Rank", b =>
                 {
-                    b.HasOne("Domain.Bro")
+                    b.HasOne("Domain.Bro", "Bro")
                         .WithMany("Ranks")
-                        .HasForeignKey("BroId");
+                        .HasForeignKey("BroId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.Set", b =>
@@ -147,13 +170,6 @@ namespace Data.Migrations
                     b.HasOne("Domain.Result")
                         .WithMany("Sets")
                         .HasForeignKey("ResultId");
-                });
-
-            modelBuilder.Entity("Domain.Team", b =>
-                {
-                    b.HasOne("Domain.Match")
-                        .WithMany("Teams")
-                        .HasForeignKey("MatchId");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,8 +8,8 @@ namespace Domain
     {
         [Key]
         public int MatchId { get; set; }
+        public List<MatchTeam> MatchTeams { get; set; }
         public DateTime Date { get; } = DateTime.Now;
-        public List<Team> Teams { get; set; }
         public Result Result { get; set; }
     }
 }

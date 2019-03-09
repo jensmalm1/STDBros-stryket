@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Domain
@@ -8,25 +9,11 @@ namespace Domain
     public class Result
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ResultId { get; set; }
-        public List<Set> Sets { get; set;}
-        public int TeamOneSets { get; set; }
-        public int TeamTwoSets { get; set; }
-        public Winner Winner {
-            get
-            {
-                return this.Winner;
-            }
-            set
-            {
-                GetWinner(this);
-            }
-        }
-        private Winner GetWinner(Result result)
-        {
-            return result.TeamOneSets == result.TeamTwoSets ? Winner.Draw :
-            result.TeamOneSets > result.TeamTwoSets ? Winner.TeamOne :
-            Winner.TeamTwo;
-        }
+        public List<Set> Sets { get; set; }
+        public int SetsCountTeam1 { get; set; }
+        public int SetsCountTeam2 { get; set; }
+        public Winner Winner { get; set; }
     }
 }
