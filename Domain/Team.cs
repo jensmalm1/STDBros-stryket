@@ -9,7 +9,7 @@ namespace Domain
         [Key]
         public int TeamId { get; set; }
         public List<MatchTeam> MatchTeams { get; set; }
-        public List<Bro> Bros { get; set; }
+        public List<Player> Bros { get; set; }
     }
 }
 

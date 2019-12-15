@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(PadelContext))]
-    partial class PadelContextModelSnapshot : ModelSnapshot
+    [Migration("20190309115513_init3")]
+    partial class init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +72,7 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BroId");
+                    b.Property<int?>("BroId");
 
                     b.Property<decimal>("Ranking");
 
@@ -161,8 +163,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Domain.Bro")
                         .WithMany("Ranks")
-                        .HasForeignKey("BroId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BroId");
                 });
 
             modelBuilder.Entity("Domain.Set", b =>

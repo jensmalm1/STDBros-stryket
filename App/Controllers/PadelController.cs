@@ -24,11 +24,35 @@ namespace App.Controllers
         [HttpGet]
         public IActionResult GetBros()
         {
-
             var response = _context.Bros.ToList();
-            var hej=response.Select(b => new { b.Name, b.Ranks.ToList().LastOrDefault().Ranking});
-            
-            return Ok(response);
+
+            var query = from b in _context.Bros
+                        join r in _context.Ranks on b.BroId equals r.BroId into gj
+                        //where r.BroId == b.BroId
+                        from subRank in gj.DefaultIfEmpty()
+
+                        select new
+                        {
+
+                            Name = b.Name,
+                            Rank = subRank.Ranking
+                        };
+            var list = query.ToList();
+
+                var names = new List<string>();
+
+            foreach (var element in list)
+            {
+                if (names.Contains(element.Name.ToString()))
+                {
+                    list.Where(x => x.Name == element.Name).ToList().ForEach(x => list.Remove(x));
+                }
+                list.Add(element);
+                names.Add(element.Name);
+            }
+
+
+            return Ok(list);
         }
 
         [HttpPost("AddGame")]
@@ -38,19 +62,19 @@ namespace App.Controllers
 
             var broDb = _context.Bros.ToList();
 
-            var bros = new List<Bro>();
+            var bros = new List<Player>();
             foreach (var name in gameInfo.Names)
             {
                 bros.Add(broDb.Find(x => x.Name.Contains(name)));
             }
 
             var teams = new List<Team>();
-            var team1=_context.Teams.Where(t => t.Bros.Contains(bros[0]) && t.Bros.Contains(bros[1])).FirstOrDefault();
-            if (team1==null)
+            var team1 = _context.Teams.Where(t => t.Bros.Contains(bros[0]) && t.Bros.Contains(bros[1])).FirstOrDefault();
+            if (team1 == null)
             {
-                team1=_context.Add(new Team
+                team1 = _context.Add(new Team
                 {
-                    Bros = new List<Bro>
+                    Bros = new List<Player>
                     {
                        bros[0],
                        bros[1]
@@ -63,9 +87,9 @@ namespace App.Controllers
             var team2 = _context.Teams.Where(t => t.Bros.Contains(bros[2]) && t.Bros.Contains(bros[3])).FirstOrDefault();
             if (team2 == null)
             {
-                team2=_context.Add(new Team
+                team2 = _context.Add(new Team
                 {
-                    Bros = new List<Bro>
+                    Bros = new List<Player>
                     {
                        bros[2],
                        bros[3]
@@ -77,9 +101,9 @@ namespace App.Controllers
 
             var sets = new List<Set>();
 
-                foreach (var set in gameInfo.Sets)
-                {
-                var thisSet=_context.Add(
+            foreach (var set in gameInfo.Sets)
+            {
+                var thisSet = _context.Add(
                     new Set
                     {
                         TeamOneGems = set.Item1,
@@ -88,36 +112,36 @@ namespace App.Controllers
                     });
                 _context.SaveChanges();
                 sets.Add(thisSet.Entity);
-                }
-                var setsCount = GetSetsCount(sets);
-
-                
-                var result = _context.Add(new Result
-                {
-                    Sets = sets,
-                    SetsCountTeam1 = setsCount.Item1,
-                    SetsCountTeam2 = setsCount.Item2,
-                    Winner = GetMatchWinner(sets)
-                }).Entity;
+            }
+            var setsCount = GetSetsCount(sets);
 
 
-                var match =new Match
-                {
-                    Result = result
-                };
+            var result = _context.Add(new Result
+            {
+                Sets = sets,
+                SetsCountTeam1 = setsCount.Item1,
+                SetsCountTeam2 = setsCount.Item2,
+                Winner = GetMatchWinner(sets)
+            }).Entity;
 
-                    _rankCalculator.AddMatchAndRanks(match,teams);
 
-                //foreach (var team in teams)
-                //{
-                //    var participant = new Participant
-                //    {
-                //        Team = team,
-                //        Match = match
-                //    };
-                //    _context.Add(participant);
-                //}
-                //_context.SaveChanges();
+            var match = new Match
+            {
+                Result = result
+            };
+
+            _rankCalculator.AddMatchAndRanks(match, teams);
+
+            //foreach (var team in teams)
+            //{
+            //    var participant = new Participant
+            //    {
+            //        Team = team,
+            //        Match = match
+            //    };
+            //    _context.Add(participant);
+            //}
+            //_context.SaveChanges();
 
             return Ok("Match added");
         }
@@ -166,11 +190,11 @@ namespace App.Controllers
         }
 
         [HttpPost("AddBro")]
-        public IActionResult AddBro([FromBody] Bro bro)
+        public IActionResult AddBro([FromBody] Player bro)
         {
 
-                _context.Add(bro);
-                _context.SaveChanges();
+            _context.Add(bro);
+            _context.SaveChanges();
             return Ok("Bro Added");
 
         }

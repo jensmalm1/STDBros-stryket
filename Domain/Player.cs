@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Domain
 {
-    public class Bro
+    public class Player
     {
-        public Bro()
+        public Player()
         {
             Ranks = new List<Rank>();
             Ranks.Add(new Rank { Ranking = Constants.StartingRank });
@@ -25,7 +25,6 @@ namespace Domain
         [Key]
         public int RankId { get; set; }
         public int BroId { get; set; }
-        public Bro Bro { get; set; }
         public decimal Ranking { get; set; }
     }
 }
